@@ -16,7 +16,11 @@ A college-demo **JavaFX application** with a modern black-themed UI for hostel b
 ## Notes
 - All data is **hardcoded**  
 - No database required  
-- Smooth **scene transitions** and responsive layout  
+- Smooth **scene transitions** and responsive layout
+
+## Screenshot
+<img width="998" height="779" alt="image" src="https://github.com/user-attachments/assets/8f4657b9-8016-44a2-a6be-1ee5e7f44cde" />
+
 
 ## Usage
 1. Clone the repository  
