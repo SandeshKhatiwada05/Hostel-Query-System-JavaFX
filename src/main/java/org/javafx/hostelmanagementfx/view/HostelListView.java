@@ -20,37 +20,56 @@ import java.util.Comparator;
 import java.util.List;
 
 public class HostelListView {
-    private final BorderPane root;
+    private final StackPane root;
     private final List<Hostel> allHostels = new ArrayList<>();
     private final FilteredList<Hostel> filtered;
 
     public HostelListView(Main app, String category) {
-        root = new BorderPane();
-        root.getStyleClass().add("page-root");
-        root.setPadding(new Insets(20));
+        root = new StackPane();
 
-        // Title & controls
+        // Background image (black-themed)
+        Image bg = new Image(getClass().getResource("/org/javafx/hostelmanagementfx/image/OptionPage.jpg").toExternalForm());
+        BackgroundImage bgImage = new BackgroundImage(
+                bg,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(1.0, 1.0, true, true, false, false)
+        );
+        root.setBackground(new Background(bgImage));
+
+        // Semi-transparent overlay for cards & controls
+        BorderPane overlay = new BorderPane();
+        overlay.setPadding(new Insets(20));
+        overlay.setStyle("-fx-background-color: rgba(12,13,15,0.75); -fx-background-radius: 20;");
+        root.getChildren().add(overlay);
+
+        // Title
         Text title = new Text(category + " Hostels");
-        title.getStyleClass().add("page-title");
+        title.setStyle("-fx-fill: #FFD700; -fx-font-size: 26px; -fx-font-weight: bold;");
+        VBox topBox = new VBox(15, title);
+        topBox.setAlignment(Pos.CENTER);
 
+        // Search & sort
         TextField search = new TextField();
         search.setPromptText("Search by name...");
+        search.setMaxWidth(250);
         search.getStyleClass().add("rounded-input");
 
         ComboBox<String> sortBox = new ComboBox<>();
         sortBox.getItems().addAll("Sort by Price: Low to High", "Sort by Price: High to Low");
         sortBox.setPromptText("Sort");
+        sortBox.setMaxWidth(200);
         sortBox.getStyleClass().add("rounded-combo");
 
-        HBox controls = new HBox(10, search, sortBox);
+        HBox controls = new HBox(15, search, sortBox);
         controls.setAlignment(Pos.CENTER);
-        controls.setPadding(new Insets(10));
 
-        VBox top = new VBox(10, title, controls);
+        VBox top = new VBox(15, topBox, controls);
         top.setAlignment(Pos.CENTER);
-        root.setTop(top);
+        overlay.setTop(top);
 
-        // Data
+        // Seed hostel data
         seedData();
         List<Hostel> categoryHostels = allHostels.stream()
                 .filter(h -> h.getCategory().equalsIgnoreCase(category))
@@ -58,28 +77,26 @@ public class HostelListView {
 
         filtered = new FilteredList<>(FXCollections.observableArrayList(categoryHostels), h -> true);
 
-        // Cards area (responsive)
-        FlowPane cards = new FlowPane();
-        cards.setHgap(20);
-        cards.setVgap(20);
-        cards.setAlignment(Pos.TOP_CENTER);
-        cards.setPadding(new Insets(20));
+        // Cards container
+        FlowPane cardsPane = new FlowPane();
+        cardsPane.setHgap(20);
+        cardsPane.setVgap(20);
+        cardsPane.setAlignment(Pos.TOP_CENTER);
+        cardsPane.setPadding(new Insets(20));
 
-        // render function
         Runnable render = () -> {
-            cards.getChildren().clear();
+            cardsPane.getChildren().clear();
             for (Hostel h : filtered) {
                 VBox card = buildCard(app, h);
-                cards.getChildren().add(card);
+                cardsPane.getChildren().add(card);
 
-                FadeTransition ft = new FadeTransition(Duration.millis(450), card);
+                FadeTransition ft = new FadeTransition(Duration.millis(400), card);
                 ft.setFromValue(0);
                 ft.setToValue(1);
                 ft.play();
             }
         };
 
-        // search & sort behavior
         search.textProperty().addListener((obs, old, q) -> {
             String query = q == null ? "" : q.trim().toLowerCase();
             filtered.setPredicate(h -> h.getName().toLowerCase().contains(query));
@@ -98,13 +115,14 @@ public class HostelListView {
         });
 
         render.run();
-        ScrollPane sp = new ScrollPane(cards);
+        ScrollPane sp = new ScrollPane(cardsPane);
         sp.setFitToWidth(true);
         sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        sp.getStyleClass().add("transparent-scroll");
-        root.setCenter(sp);
+        sp.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
 
-        // Back
+        overlay.setCenter(sp);
+
+        // Back button
         Button back = new Button("Back");
         back.getStyleClass().addAll("accent-btn", "outline-btn");
         back.setOnAction(e -> app.showMainPage());
@@ -112,15 +130,15 @@ public class HostelListView {
         HBox bottom = new HBox(back);
         bottom.setAlignment(Pos.CENTER);
         bottom.setPadding(new Insets(10));
-        root.setBottom(bottom);
+        overlay.setBottom(bottom);
     }
 
     private VBox buildCard(Main app, Hostel h) {
         VBox card = new VBox(10);
-        card.getStyleClass().addAll("card", "glass");
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(12));
         card.setPrefWidth(220);
+        card.setStyle("-fx-background-color: rgba(255,255,255,0.07); -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 15, 0.2, 0, 5);");
         card.setCache(true);
         card.setCacheHint(CacheHint.SPEED);
 
@@ -128,20 +146,21 @@ public class HostelListView {
         iv.setPreserveRatio(true);
         iv.setFitWidth(200);
         iv.setFitHeight(130);
-        try {
-            iv.setImage(new Image(h.getImageUrl(), 200, 130, true, true));
-        } catch (Exception ignored) {}
+        try { iv.setImage(new Image(h.getImageUrl(), 200, 130, true, true)); } catch (Exception ignored){}
 
         Label name = new Label(h.getName());
-        name.getStyleClass().add("card-title");
+        name.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;");
 
         Button viewBtn = new Button("View Details");
         viewBtn.getStyleClass().addAll("accent-btn", "tiny");
         viewBtn.setOnAction(e -> app.showHostelDetails(h));
 
         card.getChildren().addAll(iv, name, viewBtn);
+
         card.setOnMouseEntered(e -> card.setScaleX(1.02));
+        card.setOnMouseEntered(e -> card.setScaleY(1.02));
         card.setOnMouseExited(e -> card.setScaleX(1.0));
+        card.setOnMouseExited(e -> card.setScaleY(1.0));
 
         return card;
     }
@@ -160,5 +179,5 @@ public class HostelListView {
         allHostels.add(new Hostel("Paradise Girls", "https://picsum.photos/seed/pg/400/250", 6200, 4800, 4100, 3500, "Girls"));
     }
 
-    public BorderPane getRoot() { return root; }
+    public StackPane getRoot() { return root; }
 }
