@@ -11,20 +11,34 @@ import org.javafx.hostelmanagementfx.Main;
 import org.javafx.hostelmanagementfx.model.Hostel;
 
 public class HostelDetailsView {
-    private final BorderPane root;
+    private final StackPane root;
 
     public HostelDetailsView(Main app, Hostel hostel) {
-        root = new BorderPane();
-        root.getStyleClass().add("page-root");
-        root.setPadding(new Insets(20));
+        root = new StackPane();
 
-        // Top
+        // Background image (dark-themed)
+        Image bg = new Image(getClass().getResource("/org/javafx/hostelmanagementfx/image/OptionPage.jpg").toExternalForm());
+        BackgroundImage bgImage = new BackgroundImage(
+                bg,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(1.0, 1.0, true, true, false, false)
+        );
+        root.setBackground(new Background(bgImage));
+
+        // Overlay panel for content
+        BorderPane overlay = new BorderPane();
+        overlay.setPadding(new Insets(20));
+        overlay.setStyle("-fx-background-color: rgba(12,13,15,0.75); -fx-background-radius: 20;");
+
+        // Top: Hostel Name
         Text title = new Text(hostel.getName());
         title.getStyleClass().add("page-title");
         HBox top = new HBox(title);
         top.setAlignment(Pos.CENTER);
         top.setPadding(new Insets(10));
-        root.setTop(top);
+        overlay.setTop(top);
 
         // Center: Image + Prices
         ImageView iv = new ImageView();
@@ -52,11 +66,11 @@ public class HostelDetailsView {
 
         VBox center = new VBox(20, iv, prices);
         center.setAlignment(Pos.CENTER);
-        center.getStyleClass().addAll("card", "glass");
         center.setPadding(new Insets(20));
-        root.setCenter(center);
+        center.getStyleClass().addAll("card", "glass");
+        overlay.setCenter(center);
 
-        // Right side actions
+        // Right-side actions
         Button book = new Button("Book Now");
         book.getStyleClass().addAll("accent-btn", "large");
         book.setOnAction(e -> {
@@ -73,9 +87,9 @@ public class HostelDetailsView {
         VBox right = new VBox(15, book, contact);
         right.setAlignment(Pos.CENTER);
         right.setPadding(new Insets(10));
-        root.setRight(right);
+        overlay.setRight(right);
 
-        // Bottom contact info + back
+        // Bottom: info + back
         Label info = new Label("For enquiry call: 9826834380");
         info.getStyleClass().add("muted");
 
@@ -86,8 +100,10 @@ public class HostelDetailsView {
         HBox bottom = new HBox(20, back, info);
         bottom.setAlignment(Pos.CENTER);
         bottom.setPadding(new Insets(10));
-        root.setBottom(bottom);
+        overlay.setBottom(bottom);
+
+        root.getChildren().add(overlay);
     }
 
-    public BorderPane getRoot() { return root; }
+    public StackPane getRoot() { return root; }
 }
