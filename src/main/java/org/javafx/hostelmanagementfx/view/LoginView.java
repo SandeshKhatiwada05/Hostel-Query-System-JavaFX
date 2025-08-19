@@ -25,11 +25,11 @@ public class LoginView {
         );
         root.setBackground(new Background(bgImage));
 
-        // Overlay panel for input fields (semi-transparent)
+        // Overlay panel for input fields
         VBox overlay = new VBox(20);
         overlay.setPadding(new Insets(40));
         overlay.setAlignment(Pos.CENTER);
-        overlay.setMaxWidth(400); // restrict overlay width
+        overlay.setMaxWidth(400);
         overlay.setStyle("-fx-background-color: rgba(12,13,15,0.7); -fx-background-radius: 20;");
 
         Text title = new Text("Hostel Booking System");
@@ -48,21 +48,49 @@ public class LoginView {
         Button loginBtn = new Button("Login");
         loginBtn.getStyleClass().addAll("accent-btn", "glow-btn");
         loginBtn.setTooltip(new Tooltip("Login with username/password"));
+        loginBtn.setMaxWidth(150);
+
         loginBtn.setOnAction(e -> {
             if ("user".equals(username.getText()) && "user".equals(password.getText())) {
                 app.showMainPage();
             } else {
-                Alert a = new Alert(Alert.AlertType.ERROR, "Invalid credentials!", ButtonType.OK);
-                a.setHeaderText(null);
-                a.setTitle("Login Failed");
-                a.showAndWait();
+                // Stylish popup for invalid credentials
+                Dialog<Void> dialog = new Dialog<>();
+                dialog.setTitle("Login Failed");
+                dialog.setHeaderText(null);
+
+                DialogPane pane = dialog.getDialogPane();
+                pane.setStyle(
+                        "-fx-background-color: #1c1c1c; " +
+                                "-fx-border-color: linear-gradient(to right, #ff8c00, #ffae42); " +
+                                "-fx-border-width: 3; " +
+                                "-fx-border-radius: 12; " +
+                                "-fx-background-radius: 12;"
+                );
+
+                Label content = new Label("⚠ Invalid username or password!");
+                content.setStyle(
+                        "-fx-text-fill: #ffae42; " +
+                                "-fx-font-size: 16px; " +
+                                "-fx-font-weight: bold;"
+                );
+                content.setWrapText(true);
+                pane.setContent(content);
+
+                pane.getButtonTypes().add(ButtonType.OK);
+                Button okBtn = (Button) pane.lookupButton(ButtonType.OK);
+                okBtn.setStyle(
+                        "-fx-background-color: linear-gradient(to right, #ff8c00, #ffae42);" +
+                                "-fx-text-fill: black;" +
+                                "-fx-background-radius: 10;" +
+                                "-fx-font-weight: bold;"
+                );
+
+                dialog.showAndWait();
             }
         });
-        loginBtn.setMaxWidth(150);
 
         overlay.getChildren().addAll(title, username, password, loginBtn);
-
-        // Add overlay to root
         root.getChildren().add(overlay);
     }
 
@@ -70,4 +98,3 @@ public class LoginView {
         return root;
     }
 }
-    
