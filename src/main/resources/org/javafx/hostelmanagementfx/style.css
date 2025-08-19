@@ -1,0 +1,119 @@
+/* Dark base */
+.page-root {
+    -fx-background-color: #0c0d0f;
+}
+
+.app-title, .page-title {
+    -fx-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.85), 20, 0.2, 0, 8);
+}
+
+.page-title {
+    -fx-font-size: 24px;
+}
+
+.label, .text, .button, .combo-box, .text-field, .text-area {
+    -fx-text-fill: white;
+}
+
+/* Inputs */
+.rounded-input, .rounded-combo, .rounded-area {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-text-fill: white;
+    -fx-background-radius: 16;
+    -fx-padding: 10 14 10 14;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+}
+
+.rounded-area {
+    -fx-background-insets: 0;
+}
+
+/* Buttons */
+.button {
+    -fx-background-radius: 16;
+    -fx-cursor: hand;
+    -fx-font-weight: 600;
+}
+
+.accent-btn {
+    -fx-background-color: linear-gradient(to right, #ff8c00, #ffae42); /* orange/gold */
+    -fx-text-fill: #111;
+    -fx-effect: dropshadow(gaussian, rgba(255,174,66,0.35), 20, 0.4, 0, 4);
+}
+
+.accent-btn:hover {
+    -fx-opacity: 0.95;
+    -fx-translate-y: -1;
+}
+
+.gold-gradient {
+    -fx-background-color: linear-gradient(to right, #ffc107, #ff9800);
+    -fx-text-fill: #111;
+}
+
+.cyan-gradient {
+    -fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);
+    -fx-text-fill: #111;
+}
+
+/* sizes */
+.large { -fx-padding: 12 20 12 20; -fx-font-size: 16px; }
+.tiny  { -fx-padding: 6 12 6 12;  -fx-font-size: 12px; }
+
+/* Outline variant */
+.outline-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffd27a;
+    -fx-border-color: #ffd27a;
+    -fx-border-width: 1;
+}
+
+/* Category buttons */
+.category-btn {
+    -fx-padding: 18 26 18 26;
+    -fx-background-radius: 20;
+    -fx-font-size: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 20, 0.2, 0, 8);
+}
+
+.category-btn:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+/* Cards + glass effect */
+.card {
+    -fx-background-radius: 24;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.55), 20, 0.2, 0, 10);
+}
+
+.glass {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-radius: 24;
+}
+
+.card-title {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+/* Misc */
+.muted {
+    -fx-text-fill: #bfbfbf;
+}
+.price {
+    -fx-text-fill: #ffd27a;
+    -fx-font-weight: 700;
+}
+
+.transparent-scroll .viewport {
+    -fx-background-color: transparent;
+}
