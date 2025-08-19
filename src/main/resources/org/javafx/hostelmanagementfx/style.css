@@ -1,18 +1,25 @@
 /* Dark base */
 .page-root {
-    -fx-background-color: #0c0d0f;
+    -fx-background-color: transparent; /* image handles background */
 }
 
-.app-title, .page-title {
+.app-title {
     -fx-fill: white;
     -fx-font-size: 28px;
     -fx-font-weight: 700;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.85), 20, 0.2, 0, 8);
 }
 
-.page-title {
-    -fx-font-size: 24px;
+.rounded-input {
+    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-text-fill: white;
+    -fx-background-radius: 16;
+    -fx-padding: 10 14 10 14;
+    -fx-border-color: rgba(255,255,255,0.2);
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
 }
+
 
 .label, .text, .button, .combo-box, .text-field, .text-area {
     -fx-text-fill: white;
