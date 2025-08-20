@@ -17,7 +17,9 @@ public class HostelDetailsView {
         root = new StackPane();
 
         // Background image (dark-themed)
-        Image bg = new Image(getClass().getResource("/org/javafx/hostelmanagementfx/image/OptionPage.jpg").toExternalForm());
+        Image bg = new Image(
+                getClass().getResource("/org/javafx/hostelmanagementfx/image/OptionPage.jpg").toExternalForm()
+        );
         BackgroundImage bgImage = new BackgroundImage(
                 bg,
                 BackgroundRepeat.NO_REPEAT,
@@ -30,7 +32,7 @@ public class HostelDetailsView {
         // Overlay panel for content
         BorderPane overlay = new BorderPane();
         overlay.setPadding(new Insets(20));
-        overlay.setStyle("-fx-background-color: rgba(12,13,15,0.75); -fx-background-radius: 20;");
+        overlay.setStyle("-fx-background-color: rgba(12,13,15,0.85); -fx-background-radius: 20;");
 
         // Top: Hostel Name
         Text title = new Text(hostel.getName());
@@ -67,7 +69,6 @@ public class HostelDetailsView {
         VBox center = new VBox(20, iv, prices);
         center.setAlignment(Pos.CENTER);
         center.setPadding(new Insets(20));
-        center.getStyleClass().addAll("card", "glass");
         overlay.setCenter(center);
 
         // Right-side actions
@@ -82,7 +83,13 @@ public class HostelDetailsView {
 
         Button contact = new Button("Contact Owner");
         contact.getStyleClass().addAll("accent-btn", "large", "outline-btn");
-        contact.setOnAction(e -> app.showEmailSimulator("khatiwadasandesh501@gmail.com"));
+        contact.setOnAction(e -> {
+            try {
+                app.showEmailSimulator("khatiwadasandesh501@gmail.com");
+            } catch (Exception ex) {
+                new Alert(Alert.AlertType.ERROR, "Could not open email simulator!").show();
+            }
+        });
 
         VBox right = new VBox(15, book, contact);
         right.setAlignment(Pos.CENTER);
@@ -105,5 +112,7 @@ public class HostelDetailsView {
         root.getChildren().add(overlay);
     }
 
-    public StackPane getRoot() { return root; }
+    public StackPane getRoot() {
+        return root;
+    }
 }
