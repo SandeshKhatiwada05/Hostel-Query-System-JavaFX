@@ -20,7 +20,7 @@ A college-demo **JavaFX application** with a modern black-themed UI for hostel b
 
 ## Screenshot
 <img width="998" height="779" alt="image" src="https://github.com/user-attachments/assets/8f4657b9-8016-44a2-a6be-1ee5e7f44cde" />
-<img width="1123" height="776" alt="image" src="https://github.com/user-attachments/assets/d5a044dd-b99a-4207-99a3-99cb41073a59" />
+<img width="1123" height="786" alt="image" src="https://github.com/user-attachments/assets/f8c83971-5d3c-439b-8033-86f2bd89a3d2" />
 <img width="1248" height="901" alt="image" src="https://github.com/user-attachments/assets/9c864d47-f9fb-418f-8fd0-cfa9cd2c12a8" />
 
 
