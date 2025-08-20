@@ -2,101 +2,82 @@ package org.javafx.hostelmanagementfx.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.javafx.hostelmanagementfx.Main;
 
 public class EmailSimulatorView {
-    private final VBox root;
+    private final StackPane root;
 
     public EmailSimulatorView(Main app, String toEmail) {
-        root = new VBox(25);
+        root = new StackPane();
         root.getStyleClass().add("page-root");
-        root.setPadding(new Insets(40));
-        root.setAlignment(Pos.TOP_CENTER);
 
-        // Title
-        Text title = new Text("📧 Compose Email");
+        // ===== Background =====
+        Image bg = new Image(
+                getClass().getResource("/org/javafx/hostelmanagementfx/image/EmailBG.png").toExternalForm()
+        );
+        BackgroundImage bgImage = new BackgroundImage(
+                bg,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                new BackgroundSize(1.0, 1.0, true, true, false, false)
+        );
+        root.setBackground(new Background(bgImage));
+
+        // ===== Title =====
+        Text title = new Text("Compose Email");
         title.getStyleClass().add("page-title");
 
-        // Recipient section
-        Label toLabel = new Label("To:");
-        toLabel.getStyleClass().add("field-label");
-
+        // ===== Fields =====
         TextField to = new TextField(toEmail);
         to.setEditable(false);
-        to.getStyleClass().add("tagged-input");
-
-        // Message area
-        Label msgLabel = new Label("Message:");
-        msgLabel.getStyleClass().add("field-label");
+        to.getStyleClass().add("rounded-input");
 
         TextArea message = new TextArea();
         message.setPromptText("Type your message here...");
         message.setPrefRowCount(8);
-        message.setWrapText(true);
-        message.setStyle("-fx-text-fill: #222; -fx-prompt-text-fill: #888;"); // visible text
+        message.getStyleClass().add("rounded-area");
 
-        // Buttons
-        Button send = new Button("✉ Send");
+        // ===== Buttons =====
+        Button send = new Button("Send");
         send.getStyleClass().addAll("accent-btn", "glow-btn");
-        send.setOnAction(e -> showCoolPopup());
+        send.setOnAction(e -> {
+            Alert a = new Alert(Alert.AlertType.INFORMATION, "Email Sent!", ButtonType.OK);
+            a.setHeaderText(null);
+            a.setTitle("Email");
+            a.showAndWait();
+        });
 
-        Button back = new Button("⬅ Back to Details");
+        Button back = new Button("Back to Details");
         back.getStyleClass().addAll("accent-btn", "tiny", "outline-btn");
         back.setOnAction(e -> app.backFromEmail());
 
-        HBox buttonBox = new HBox(15, send, back);
-        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        HBox buttons = new HBox(12, send, back);
+        buttons.setAlignment(Pos.CENTER_RIGHT);
 
-        // Card container
-        VBox card = new VBox(18,
-                toLabel, to,
-                msgLabel, message,
-                buttonBox
+        // ===== Card (Overlay) =====
+        VBox card = new VBox(15,
+                title,
+                new Label("To:"), to,
+                new Label("Message:"), message,
+                buttons
         );
         card.setAlignment(Pos.CENTER_LEFT);
-        card.getStyleClass().addAll("card", "glass", "email-card");
+        card.getStyleClass().addAll("card", "glass");
         card.setPadding(new Insets(25));
+        card.setMaxWidth(500); // prevent full stretch
+        card.setMinWidth(350);
 
-        root.getChildren().addAll(title, card);
+        // ===== Center Layout =====
+        VBox centerBox = new VBox(card);
+        centerBox.setAlignment(Pos.CENTER);
+
+        root.getChildren().add(centerBox);
     }
 
-    // Custom "cool" popup instead of boring Alert
-    private void showCoolPopup() {
-        Stage popup = new Stage();
-        popup.initStyle(StageStyle.TRANSPARENT);
-        popup.initModality(Modality.APPLICATION_MODAL);
-
-        VBox box = new VBox(15);
-        box.setAlignment(Pos.CENTER);
-        box.setPadding(new Insets(30));
-        box.setBackground(new Background(new BackgroundFill(Color.web("#ffffffcc"), new CornerRadii(15), Insets.EMPTY)));
-        box.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0.3, 0, 5);");
-
-        Label icon = new Label("✅");
-        icon.setStyle("-fx-font-size: 32px;");
-
-        Label msg = new Label("Your email has been sent!");
-        msg.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
-
-        Button ok = new Button("OK");
-        ok.getStyleClass().add("accent-btn");
-        ok.setOnAction(e -> popup.close());
-
-        box.getChildren().addAll(icon, msg, ok);
-
-        Scene scene = new Scene(box);
-        scene.setFill(Color.TRANSPARENT);
-        popup.setScene(scene);
-        popup.showAndWait();
-    }
-
-    public VBox getRoot() { return root; }
+    public StackPane getRoot() { return root; }
 }
