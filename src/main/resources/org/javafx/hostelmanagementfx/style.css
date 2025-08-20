@@ -162,3 +162,16 @@
 .transparent-scroll .viewport {
     -fx-background-color: transparent;
 }
+
+.field-label {
+    -fx-text-fill: #f1f1f1;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.email-card {
+    -fx-background-color: rgba(30, 30, 30, 0.85);
+    -fx-border-color: #4cafef;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
