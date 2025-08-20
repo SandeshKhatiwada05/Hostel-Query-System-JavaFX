@@ -2,9 +2,14 @@ package org.javafx.hostelmanagementfx.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.javafx.hostelmanagementfx.Main;
 
 public class EmailSimulatorView {
@@ -20,13 +25,13 @@ public class EmailSimulatorView {
         Text title = new Text("📧 Compose Email");
         title.getStyleClass().add("page-title");
 
-        // Email input (non-editable)
+        // Recipient section
         Label toLabel = new Label("To:");
         toLabel.getStyleClass().add("field-label");
 
         TextField to = new TextField(toEmail);
         to.setEditable(false);
-        to.getStyleClass().add("rounded-input");
+        to.getStyleClass().add("tagged-input");
 
         // Message area
         Label msgLabel = new Label("Message:");
@@ -35,17 +40,13 @@ public class EmailSimulatorView {
         TextArea message = new TextArea();
         message.setPromptText("Type your message here...");
         message.setPrefRowCount(8);
-        message.getStyleClass().add("rounded-area");
+        message.setWrapText(true);
+        message.setStyle("-fx-text-fill: #222; -fx-prompt-text-fill: #888;"); // visible text
 
         // Buttons
-        Button send = new Button("Send ✉");
+        Button send = new Button("✉ Send");
         send.getStyleClass().addAll("accent-btn", "glow-btn");
-        send.setOnAction(e -> {
-            Alert a = new Alert(Alert.AlertType.INFORMATION, "✅ Email Sent!", ButtonType.OK);
-            a.setHeaderText(null);
-            a.setTitle("Email");
-            a.showAndWait();
-        });
+        send.setOnAction(e -> showCoolPopup());
 
         Button back = new Button("⬅ Back to Details");
         back.getStyleClass().addAll("accent-btn", "tiny", "outline-btn");
@@ -65,6 +66,36 @@ public class EmailSimulatorView {
         card.setPadding(new Insets(25));
 
         root.getChildren().addAll(title, card);
+    }
+
+    // Custom "cool" popup instead of boring Alert
+    private void showCoolPopup() {
+        Stage popup = new Stage();
+        popup.initStyle(StageStyle.TRANSPARENT);
+        popup.initModality(Modality.APPLICATION_MODAL);
+
+        VBox box = new VBox(15);
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(30));
+        box.setBackground(new Background(new BackgroundFill(Color.web("#ffffffcc"), new CornerRadii(15), Insets.EMPTY)));
+        box.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0.3, 0, 5);");
+
+        Label icon = new Label("✅");
+        icon.setStyle("-fx-font-size: 32px;");
+
+        Label msg = new Label("Your email has been sent!");
+        msg.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+
+        Button ok = new Button("OK");
+        ok.getStyleClass().add("accent-btn");
+        ok.setOnAction(e -> popup.close());
+
+        box.getChildren().addAll(icon, msg, ok);
+
+        Scene scene = new Scene(box);
+        scene.setFill(Color.TRANSPARENT);
+        popup.setScene(scene);
+        popup.showAndWait();
     }
 
     public VBox getRoot() { return root; }
