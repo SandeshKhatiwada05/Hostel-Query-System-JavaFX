@@ -8,8 +8,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.javafx.hostelmanagementfx.Main;
 
-import java.net.URL;
-
 public class EmailSimulatorView {
     private final StackPane root;
 
@@ -17,60 +15,62 @@ public class EmailSimulatorView {
         root = new StackPane();
         root.getStyleClass().add("page-root");
 
-        // ===== Safe Background =====
-        String bgPath = "/org/javafx/hostelmanagementfx/image/EmailBG.png";
+        // ===== Background =====
+        String bgPath = "/org/javafx/hostelmanagementfx/image/EmailBG.jpg"; // <-- Leading slash!
         try {
-            URL url = getClass().getResource(bgPath);
-            if (url != null) {
-                Image bg = new Image(url.toExternalForm());
-                BackgroundImage bgImage = new BackgroundImage(
-                        bg,
-                        BackgroundRepeat.NO_REPEAT,
-                        BackgroundRepeat.NO_REPEAT,
-                        BackgroundPosition.CENTER,
-                        new BackgroundSize(1.0, 1.0, true, true, false, false)
-                );
-                root.setBackground(new Background(bgImage));
-            } else {
-                System.err.println("Email background not found at: " + bgPath);
-                root.setStyle("-fx-background-color: #0c0d0f;");
-            }
+            Image bg = new Image(getClass().getResource(bgPath).toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    bg,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(1.0, 1.0, true, true, false, false)
+            );
+            root.setBackground(new Background(bgImage));
         } catch (Exception ex) {
-            System.err.println("Failed to load EmailBG.png: " + ex);
-            root.setStyle("-fx-background-color: #0c0d0f;");
+            System.err.println("Failed to load EmailBG.jpg: " + ex);
+            root.setStyle("-fx-background-color: #0c0d0f;"); // fallback
         }
 
         // ===== Title =====
-        Text title = new Text("Compose Email");
-        title.getStyleClass().add("page-title");
+        Text title = new Text("📧 Compose Email");
+        title.setStyle("-fx-fill: white; -fx-font-weight: bold; -fx-font-size: 24px;");
 
-        // ===== Fields =====
+        // ===== Labels and Fields =====
         Label toLbl = new Label("To:");
-        toLbl.getStyleClass().add("field-label");
+        toLbl.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
 
         TextField to = new TextField(toEmail);
         to.setEditable(false);
-        to.getStyleClass().add("rounded-input");
+        to.setStyle(
+                "-fx-background-radius: 10; " +
+                        "-fx-background-color: rgba(255,255,255,0.1); " +
+                        "-fx-text-fill: white; " +
+                        "-fx-border-color: white; -fx-border-radius: 10;"
+        );
 
         Label msgLbl = new Label("Message:");
-        msgLbl.getStyleClass().add("field-label");
+        msgLbl.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
 
         TextArea message = new TextArea();
         message.setPromptText("Type your message here...");
         message.setPrefRowCount(8);
-        message.getStyleClass().addAll("rounded-area");
-        // Ensure readable text + a dark inner background so white text doesn't disappear
         message.setStyle(
                 "-fx-text-fill: white; " +
-                        "-fx-control-inner-background: rgba(255,255,255,0.06); " +
+                        "-fx-control-inner-background: rgba(0,0,0,0.25); " +
                         "-fx-background-insets: 0; " +
                         "-fx-highlight-fill: derive(#ffd27a, -20%); " +
-                        "-fx-highlight-text-fill: black;"
+                        "-fx-highlight-text-fill: black; " +
+                        "-fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: white;"
         );
 
         // ===== Buttons =====
-        Button send = new Button("Send");
-        send.getStyleClass().addAll("accent-btn", "glow-btn");
+        Button send = new Button("Send ✉");
+        send.setStyle(
+                "-fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);" +
+                        "-fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 15; " +
+                        "-fx-padding: 8 20;"
+        );
         send.setOnAction(e -> {
             Dialog<Void> dialog = new Dialog<>();
             dialog.setTitle("Email Sent");
@@ -78,10 +78,11 @@ public class EmailSimulatorView {
 
             DialogPane pane = dialog.getDialogPane();
             pane.setStyle(
-                    "-fx-background-color: rgba(12,13,15,0.92); " +
+                    "-fx-background-color: rgba(12,13,15,0.9); " +
                             "-fx-border-color: linear-gradient(to right, #00c6ff, #0072ff); " +
                             "-fx-border-width: 2; -fx-border-radius: 12; -fx-background-radius: 12;"
             );
+
             Label content = new Label("✅ Your email was sent successfully!");
             content.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: 600;");
             pane.setContent(content);
@@ -95,14 +96,19 @@ public class EmailSimulatorView {
             dialog.showAndWait();
         });
 
-        Button back = new Button("Back to Details");
-        back.getStyleClass().addAll("accent-btn", "tiny", "outline-btn");
+        Button back = new Button("⬅ Back to Details");
+        back.setStyle(
+                "-fx-background-color: transparent; " +
+                        "-fx-border-color: white; -fx-border-radius: 10; " +
+                        "-fx-text-fill: white; -fx-font-weight: bold; " +
+                        "-fx-padding: 6 15;"
+        );
         back.setOnAction(e -> app.backFromEmail());
 
         HBox buttons = new HBox(12, send, back);
         buttons.setAlignment(Pos.CENTER_RIGHT);
 
-        // ===== Card (Overlay) =====
+        // ===== Card Overlay =====
         VBox card = new VBox(15,
                 title,
                 toLbl, to,
@@ -110,16 +116,21 @@ public class EmailSimulatorView {
                 buttons
         );
         card.setAlignment(Pos.CENTER_LEFT);
-        card.getStyleClass().addAll("card", "glass", "email-card");
-        card.setPadding(new Insets(25));
+        card.setStyle(
+                "-fx-background-color: rgba(0,0,0,0.35); " +
+                        "-fx-background-radius: 20; -fx-padding: 25;"
+        );
         card.setMaxWidth(520);
         card.setMinWidth(360);
 
         VBox centerBox = new VBox(card);
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setPadding(new Insets(30));
+
         root.getChildren().add(centerBox);
     }
 
-    public StackPane getRoot() { return root; }
+    public StackPane getRoot() {
+        return root;
+    }
 }
